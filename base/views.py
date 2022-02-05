@@ -25,6 +25,9 @@ from .forms import RoomForm , UserForm
 # 
 
 
+
+
+
 def loginPage(request):
 
     page = 'login'
@@ -54,9 +57,18 @@ def loginPage(request):
 
 
 
+
+
+
+
 def logoutUser (request):
     logout(request)
     return redirect ('home')
+
+
+
+
+
 
 
 
@@ -79,6 +91,10 @@ def registerPage (request):
     return render (request , 'base/login_register.html' , {'form' : form })
 
 
+
+
+
+
 def home (request):
 
     q = request.GET.get('q') if request.GET.get('q') != None  else ''
@@ -88,13 +104,18 @@ def home (request):
         Q(name__icontains=q) |
         Q(description__icontains=q)
     )
-    topics = Topic.objects.all()
+
+    topics = Topic.objects.all()[0:5] 
     room_count = rooms.count()
-    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    room_messages = Message.objects.filter(
+        Q(room__topic__name__icontains=q))[0:8]
 
     topics = Topic.objects.all()
     context = {'rooms': rooms ,'topics':topics , 'room_count':room_count , 'room_messages' : room_messages}
     return render (request, "base/home.html" , context)
+
+
+
 
 
 
@@ -116,6 +137,8 @@ def room (request , pk):
 
 
 
+
+
 @login_required(login_url='login')
 def userProfile(request ,pk):
     user = User.objects.get(id=pk)
@@ -124,6 +147,7 @@ def userProfile(request ,pk):
     topics = Topic.objects.all()
     context = {'user' : user , 'rooms' : rooms ,'room_messages' : room_messages  , 'topics' : topics}
     return render(request, 'base/profile.html' , context)
+
 
 
 
@@ -150,12 +174,16 @@ def createRoom (request):
     context ={'form':form , ' topics' :  topics}
     return render (request, 'base/room_form.html' , context)
 
+
+
+
+
+
 @login_required(login_url='login')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
     topics = Topic.objects.all()
-
 
     if request.user != room.host :
         return HttpResponse('you are not allowed here!')
@@ -173,6 +201,8 @@ def updateRoom(request, pk):
     return render(request , 'base/room_form.html' , context)
 
 
+
+
 @login_required(login_url='login')
 def deleteRoom(request ,pk):
     room = Room.objects.get(id=pk)
@@ -185,6 +215,8 @@ def deleteRoom(request ,pk):
         room.delete()
         return redirect('home')
     return render(request, 'base/delete.html' , {'obj': room})
+
+
 
 
 @login_required(login_url='login')
@@ -200,6 +232,9 @@ def deleteMessage(request ,pk):
         return redirect('home')
     return render(request, 'base/delete.html' , {'obj': message})
 
+
+
+
 @login_required(login_url='login')
 def updateUser(request):
     user = request.user
@@ -212,3 +247,17 @@ def updateUser(request):
            return redirect('user-profile' , pk=user.id)
 
     return render (request, 'base/update-user.html' , {'form' :form} ) 
+
+
+
+
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None  else ''
+    topics = Topic.objects.filter(name__icontains=q)
+    return render (request, 'base/topics.html' , {'topics':topics} )
+
+
+
+def activityPage(request):
+    room_messages = Message.objects.all()
+    return render (request, 'base/activity.html' , {'room_messages' : room_messages})
