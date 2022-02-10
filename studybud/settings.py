@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure--h=#sp@%lbrww^cd20$qbp40ji70=cm=izn%7pkzv0hl4ev-nv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['groupper-platform.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','groupper-platform.herokuapp.com']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'base.apps.BaseConfig',
@@ -96,6 +97,10 @@ DATABASES = {
     }
 }
 
+WHITENOISE_USE_FINDERS = True
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
