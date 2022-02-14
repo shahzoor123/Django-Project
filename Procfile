@@ -1,1 +1,1 @@
-web: gunicorn <studybud>.wsgi:application
+web: gunicorn studybud.wsgi:application
