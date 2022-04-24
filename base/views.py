@@ -135,7 +135,7 @@ def room (request , pk):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def userProfile(request ,pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
@@ -149,7 +149,7 @@ def userProfile(request ,pk):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def createRoom (request):
     form = RoomForm()
     topics = Topic.objects.all()
@@ -175,7 +175,7 @@ def createRoom (request):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
@@ -199,7 +199,7 @@ def updateRoom(request, pk):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def deleteRoom(request ,pk):
     room = Room.objects.get(id=pk)
 
@@ -215,7 +215,7 @@ def deleteRoom(request ,pk):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def deleteMessage(request ,pk):
     message = Message.objects.get(id=pk)
 
@@ -231,7 +231,7 @@ def deleteMessage(request ,pk):
 
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def updateUser(request):
     user = request.user
     form = UserForm(instance=user)
